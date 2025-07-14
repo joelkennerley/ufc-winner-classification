@@ -36,14 +36,23 @@ def stance_ohe(data):
     data = pd.concat([data, ohe_transform1, ohe_transform2], axis=1).drop(['f1_stance', 'f2_stance'], axis=1)
     return data
 
+def convert_dob_to_years(data):
+    # convert from datetime to age in years
+    today = pd.to_datetime('today')
+    data['f1_age'] = ((today - data['f1_dob']).dt.days / 365.25).round(1)
+    data['f2_age'] = ((today - data['f2_dob']).dt.days / 365.25).round(1)
+    data = data.drop(['f1_dob', 'f2_dob'], axis=1)
+    return data
+
 def main():
-    data = pd.read_csv('cleaned_data.csv')
+    data = pd.read_csv('cleaned_data.csv', parse_dates=['f1_dob', 'f2_dob'])
     data = encode_winner(data)
     data = encode_title_fights(data)
     data = encode_gender(data)
     data = handle_na(data)
     data = drop_non_pred(data)
     data = stance_ohe(data)
+    data = convert_dob_to_years(data)
 
     data.to_csv('preprocessed_data.csv', index=False)
 
