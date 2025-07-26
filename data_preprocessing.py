@@ -37,15 +37,14 @@ def stance_ohe(data):
     return data
 
 def convert_dob_to_years(data):
-    # convert from datetime to age in years
-    today = pd.to_datetime('today')
-    data['f1_age'] = ((today - data['f1_dob']).dt.days / 365.25).round(1)
-    data['f2_age'] = ((today - data['f2_dob']).dt.days / 365.25).round(1)
-    data = data.drop(['f1_dob', 'f2_dob'], axis=1)
+    # convert from datetime of dob and gets age of time when they fought
+    data['f1_age'] = ((data['date'] - data['f1_dob']).dt.days / 365.25).round(1)
+    data['f2_age'] = ((data['date'] - data['f2_dob']).dt.days / 365.25).round(1)
+    data = data.drop(['f1_dob', 'f2_dob','date'], axis=1)
     return data
 
 def main():
-    data = pd.read_csv('cleaned_data.csv', parse_dates=['f1_dob', 'f2_dob'])
+    data = pd.read_csv('cleaned_data.csv', parse_dates=['f1_dob', 'f2_dob', 'date'])
     data = encode_winner(data)
     data = encode_title_fights(data)
     data = encode_gender(data)

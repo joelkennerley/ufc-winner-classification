@@ -32,12 +32,13 @@ def reach_to_cm(reach_series):
     reach_cm = pd.to_numeric(reach_series.str.strip('"'), errors='coerce')
     return round(reach_cm * 2.54, 2)
 
-def dob_to_datetime(dob_series):
+def to_datetime(date_series, form):
     """
-    :param dob_series: series which has each fighters d.o.b in form (Jan 21, 1997)
-    :return: series which now has dob as a datetime
+    :param form: format of datetime, one uses full month eg. June and Jun
+    :param date_series: series which has each date in form (Jan 21, 1997)
+    :return: series which now has date as a datetime
     """
-    return pd.to_datetime(dob_series, format='%b %d, %Y', errors='coerce')
+    return pd.to_datetime(date_series, format=form, errors='coerce')
 
 def convert_percentages(percentage_series):
     """
@@ -50,7 +51,7 @@ def convert_percentages(percentage_series):
 def main():
     raw_features = pd.read_csv('raw_features.csv')
     # remove unnecessary columns
-    data = raw_features.drop(['method', 'time', 'ref', 'f1_id', 'f1_name', 'f2_id', 'f2_name'], axis=1)
+    data = raw_features.drop(['method', 'time', 'ref', 'f1_name', 'f2_name'], axis=1)
     # replace spaces with _
     data.columns = data.columns.str.replace(' ', '_')
 
@@ -63,8 +64,10 @@ def main():
     data['f1_reach'] = reach_to_cm(data['f1_reach'])
     data['f2_reach'] = reach_to_cm(data['f2_reach'])
 
-    data['f1_dob'] = dob_to_datetime(data['f1_dob'])
-    data['f2_dob'] = dob_to_datetime(data['f2_dob'])
+    data['f1_dob'] = to_datetime(data['f1_dob'], '%b %d, %Y')
+    data['f2_dob'] = to_datetime(data['f2_dob'], '%b %d, %Y')
+
+    data['date'] = to_datetime(data['date'].str.strip(), '%B %d, %Y')
 
     data['f1_str_acc'] = convert_percentages(data['f1_str_acc'])
     data['f2_str_acc'] = convert_percentages(data['f2_str_acc'])
@@ -77,6 +80,7 @@ def main():
 
     data['f1_td_def'] = convert_percentages(data['f1_td_def'])
     data['f2_td_def'] = convert_percentages(data['f2_td_def'])
+
 
     data.to_csv('cleaned_data.csv', index=False)
 
