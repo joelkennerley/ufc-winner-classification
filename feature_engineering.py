@@ -64,7 +64,7 @@ def update_elo(winner_rating, loser_rating, k=4):
 def add_difference_columns(data):
     # create new feature which captures the diff from f1 to f2
     columns = ['reach', 'age', 'height', 'SLpM', 'str_acc', 'SApM', 'str_def', 'td_avg',
-                 'td_acc', 'td_def', 'sub_avg', 'wins', 'elo']
+                 'td_acc', 'td_def', 'sub_avg', 'wins', 'elo', 'total_fights']
     for col in columns:
         data[f'{col}_diff'] = round(data[f'f1_{col}'] - data[f'f2_{col}'],3)
     return data
@@ -77,7 +77,7 @@ def days_since_last_fight(data):
         # add last
         for num in nums:
             last_fight = fighter_stats[row[f'fighter{num}_id']]['last_fight']
-            days_since = (pd.to_datetime('today') - pd.to_datetime(last_fight)).days
+            days_since = (pd.to_datetime(data.at[index, 'date']) - pd.to_datetime(last_fight)).days
             data.at[index, f'f{num}_last_fight'] = days_since
             fighter_stats[row[f'fighter{num}_id']]['last_fight'] = data.at[index, 'date']
     return data
@@ -89,13 +89,33 @@ def last_fights_result(data):
         for num in nums:
             # result history is a list of all previous fights as wins and losses
             # sum up last 3 items in list to get amount won in last 3
-            data.at[index, f'f{num}_last_3'] = sum(fighter_stats[row[f'fighter{num}_id']]['history'][-3:])
-            if data.at[index, 'result'] == :
-                fighter_stats[row[f'fighter{num}_id']]['history'].append(1)
-            else:
-                fighter_stats[row[f'fighter{num}_id']]['history'].append(0)
+            data.at[index, f'f{num}_last_3'] = sum(fighter_stats[row[f'fighter{num}_id']]['history'][-5:])
+
+        if data.at[index, 'result'] == 1:
+            fighter_stats[row[f'fighter1_id']]['history'].append(1)
+            fighter_stats[row[f'fighter2_id']]['history'].append(0)
+        else:
+            fighter_stats[row[f'fighter2_id']]['history'].append(1)
+            fighter_stats[row[f'fighter1_id']]['history'].append(0)
     return data
 
+def win_percent(data):
+    data = data.sort_values(by='date')  # iterate through df from earliest fight
+    for index, row in data.iterrows():
+        for num in [1,2]:
+            wins = data.at[index, f'f{num}_wins']
+            losses = data.at[index, f'f{num}_losses']
+            data.at[index, f'f{num}_win_pct'] = wins/(wins + losses)
+    return data
+
+def experience(data):
+    data = data.sort_values(by='date')  # iterate through df from earliest fight
+    for index, row in data.iterrows():
+        for num in [1, 2]:
+            wins = data.at[index, f'f{num}_wins']
+            losses = data.at[index, f'f{num}_losses']
+            data.at[index, f'f{num}_total_fights'] = wins + losses
+    return data
 # =====================================================================
 
 # ============== main functions =======================================
@@ -117,15 +137,16 @@ def calculate_record(data):
             fighter2_wins(row)
     return data
 
-
 def main():
     data = pd.read_csv('preprocessed_data.csv')
     data = calculate_record(data)
-    data = add_difference_columns(data)
     data = days_since_last_fight(data)
     data = last_fights_result(data)
+    data = win_percent(data)
+    data = experience(data)
+    data = add_difference_columns(data)
     print(data.columns)
-    data.to_csv('test_features', index = False)
+    data.to_csv('test_features.csv', index = False)
 
 if __name__ == '__main__':
     main()

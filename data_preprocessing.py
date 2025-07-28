@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 
 def encode_winner(data):
+    # drop all draws as it does not help predict winner/loser
+    data = data[data['result'] != 'draw']
     # winner = fighter1 when result is 1
     data['result'] = np.where(data['result'] == data['fighter1'], 1, 0)
     return data
@@ -25,7 +27,8 @@ def handle_na(data):
 
 def drop_non_pred(data):
     # drop non predictive columns
-    data = data.drop(['fighter1_id', 'fighter2_id', 'fight_id', 'fighter1', 'fighter2', 'round', 'format', 'bout'], axis=1)
+    data = data.drop(['fighter1_id', 'fighter2_id', 'fight_id', 'fighter1', 'fighter2', 'round', 'format', 'bout',
+                      'date', 'f1_id','f2_id', 'f1_no_contests', 'f2_no_contests'], axis=1)
     return data
 
 def stance_ohe(data):
@@ -40,7 +43,7 @@ def convert_dob_to_years(data):
     # convert from datetime of dob and gets age of time when they fought
     data['f1_age'] = ((data['date'] - data['f1_dob']).dt.days / 365.25).round(1)
     data['f2_age'] = ((data['date'] - data['f2_dob']).dt.days / 365.25).round(1)
-    data = data.drop(['f1_dob', 'f2_dob','date'], axis=1)
+    data = data.drop(['f1_dob', 'f2_dob'], axis=1)
     return data
 
 def main():
@@ -49,9 +52,9 @@ def main():
     data = encode_title_fights(data)
     data = encode_gender(data)
     data = handle_na(data)
-    data = drop_non_pred(data)
     data = stance_ohe(data)
     data = convert_dob_to_years(data)
+    # data = drop_non_pred(data)
 
     data.to_csv('preprocessed_data.csv', index=False)
 
