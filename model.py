@@ -4,13 +4,13 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 
-
-
 # data = pd.read_csv('preprocessed_data.csv').iloc[-5500:]
 # data = data.drop(['f1_elo', 'f2_elo'], axis=1)
 
 data = pd.read_csv('test_features.csv')
 print(data.head())
+
+# testing model by dropping different features
 data = data.drop(['fight_id', 'bout', 'round', 'format', 'date', 'f2_stance_Sideways', 'female', 'title_fight', 'wins_diff', 'total_fights_diff'], axis=1)
 cols = [1,2]
 for col in cols:
