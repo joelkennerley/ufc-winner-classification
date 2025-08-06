@@ -61,6 +61,8 @@ def update_elo(winner_rating, loser_rating, k=4):
 
 # ===================================================================
 
+# =========== creating new features =================================
+
 def add_difference_columns(data):
     # create new feature which captures the diff from f1 to f2
     columns = ['reach', 'age', 'height', 'SLpM', 'str_acc', 'SApM', 'str_def', 'td_avg',
@@ -116,6 +118,7 @@ def experience(data):
             losses = data.at[index, f'f{num}_losses']
             data.at[index, f'f{num}_total_fights'] = wins + losses
     return data
+
 # =====================================================================
 
 # ============== main functions =======================================
