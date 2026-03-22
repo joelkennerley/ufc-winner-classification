@@ -1,7 +1,9 @@
 import pandas as pd
 
-fight_summary = pd.read_csv('fight_summaries.csv')
-fighter_df = pd.read_csv('fighter_stats.csv')
+fight_summary_data_url = 'https://raw.githubusercontent.com/joelkennerley/ufc-stats-scraper/main/data/fight_summaries.csv'
+fighter_stats_url = 'https://raw.githubusercontent.com/joelkennerley/ufc-stats-scraper/main/data/fighter_stats.csv'
+fight_summary = pd.read_csv(fight_summary_data_url)
+fighter_df = pd.read_csv(fighter_stats_url)
 
 # fighter 1s features merged into summary df
 f1_features = pd.merge(fight_summary, fighter_df, how="left", left_on = 'fighter1_id', right_on='id')
@@ -12,4 +14,4 @@ renamed1 = f1_features.rename(columns=lambda x: f'f1_{x}' if x in fighter_df els
 f1_f2_features = pd.merge(renamed1, fighter_df, how="left", left_on = 'fighter2_id', right_on='id')
 full_features = f1_f2_features.rename(columns=lambda x: f'f2_{x}' if x in fighter_df else x)
 
-full_features.to_csv('raw_features.csv', index=False)
+full_features.to_csv('data/raw_features.csv', index=False)
