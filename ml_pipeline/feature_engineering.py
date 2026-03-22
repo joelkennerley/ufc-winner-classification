@@ -141,7 +141,7 @@ def calculate_record(data):
     return data
 
 def main():
-    data = pd.read_csv('preprocessed_data.csv')
+    data = pd.read_csv('../data/preprocessed_data.csv')
     data = calculate_record(data)
     data = days_since_last_fight(data)
     data = last_fights_result(data)
@@ -149,7 +149,20 @@ def main():
     data = experience(data)
     data = add_difference_columns(data)
     print(data.columns)
-    data.to_csv('test_features.csv', index = False)
+    data.to_csv('../data/model_ready_data.csv', index = False)
+
+def combine_historic_and_upcoming(upcoming_fights_df):
+    data = pd.read_csv('../preprocessed_data.csv')
+    data = pd.concat([upcoming_fights_df, data], ignore_index=True)
+    data = calculate_record(data)
+    data = days_since_last_fight(data)
+    data = last_fights_result(data)
+    data = win_percent(data)
+    data = experience(data)
+    data = add_difference_columns(data)
+    print(data.columns)
+    data.to_csv('../data/upcoming_fights_prediction_data.csv', index=False)
+    return data
 
 if __name__ == '__main__':
     main()
