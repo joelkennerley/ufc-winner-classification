@@ -48,10 +48,12 @@ def convert_percentages(percentage_series):
     numerator = pd.to_numeric(percentage_series.str.strip('%'), errors='coerce')
     return numerator/100
 
-def main():
-    raw_features = pd.read_csv('raw_features.csv')
+def clean_data(raw_features=None):
+    # default the csv file, otherwise takes a df as argument
+    if raw_features is None:
+        raw_features = pd.read_csv('../data/raw_features.csv')
     # remove unnecessary columns
-    data = raw_features.drop(['method', 'time', 'ref', 'f1_name', 'f2_name'], axis=1)
+    data = raw_features.drop(['method', 'time', 'ref', 'f1_name', 'f2_name'], axis=1,errors='ignore')
     # replace spaces with _
     data.columns = data.columns.str.replace(' ', '_')
 
@@ -82,10 +84,11 @@ def main():
     data['f2_td_def'] = convert_percentages(data['f2_td_def'])
 
 
-    data.to_csv('cleaned_data.csv', index=False)
+    data.to_csv('../data/cleaned_data.csv', index=False)
+    return data
 
 if __name__ == "__main__":
-    main()
+    clean_data()
 
 
 
