@@ -3,6 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
+import joblib
 
 # data = pd.read_csv('preprocessed_data.csv').iloc[-5500:]
 # data = data.drop(['f1_elo', 'f2_elo'], axis=1)
@@ -38,6 +39,8 @@ print("Accuracy:", accuracy)
 model = RandomForestClassifier()
 scores = cross_val_score(model, X, Y, cv=5)
 print("CV Accuracy:", scores.mean())
+
+joblib.dump(model, 'ufc_prediction_rf_model.joblib')
 
 importances = rf.feature_importances_
 feature_names = X_train.columns
