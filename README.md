@@ -30,4 +30,3 @@ The dataset was gathered by scraping detailed fight statistics from UFCStats.com
 - Have to run all files sequentially to run the program (will put together soon)
 - The data used is limited to data provided on ufcstats.com
 - elo system isnt very effective as ufc fights happen far less frequently than other sports
-- need to test other models (eg. boosting, logistic regression) and finetuning.
