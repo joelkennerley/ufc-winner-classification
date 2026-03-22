@@ -59,9 +59,12 @@ def preprocess_data(data=None):
     data = convert_dob_to_years(data)
     # data = drop_non_pred(data)
 
-    data.to_csv('../data/preprocessed_data.csv', index=False)
     return data
+
+def main():
+    data = preprocess_data()
+    data.to_csv('../data/preprocessed_data.csv', index=False)
 
 
 if __name__ == "__main__":
-    preprocess_data()
+    main()

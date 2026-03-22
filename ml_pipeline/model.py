@@ -11,15 +11,7 @@ import joblib
 data = pd.read_csv('../data/model_ready_data.csv')
 print(data.head())
 
-# testing model by dropping different features
-data = data.drop(['fight_id', 'bout', 'round', 'format', 'date', 'f2_stance_Sideways', 'female', 'title_fight', 'wins_diff', 'total_fights_diff'], axis=1)
-cols = [1,2]
-for col in cols:
-    data = data.drop([f'fighter{col}_id', f'fighter{col}', f'f{col}_id', f'f{col}_draws', f'f{col}_no_contests', f'f{col}_elo',
-                      f'f{col}_stance_Open Stance', f'f{col}_stance_Orthodox', f'f{col}_stance_Southpaw',
-                      f'f{col}_stance_Switch', f'f{col}_stance_Unknown', f'f{col}_SLpM', f'f{col}_SApM', f'f{col}_str_acc',
-                      f'f{col}_height', f'f{col}_reach', f'f{col}_last_3', f'f{col}_wins', f'f{col}_losses', f'f{col}_sub_avg', f'f{col}_weight',
-                      f'f{col}_total_fights', f'f{col}_str_def'], axis=1)
+
 
 print(data.columns)
 

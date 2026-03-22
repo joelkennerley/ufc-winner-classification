@@ -83,12 +83,14 @@ def clean_data(raw_features=None):
     data['f1_td_def'] = convert_percentages(data['f1_td_def'])
     data['f2_td_def'] = convert_percentages(data['f2_td_def'])
 
-
-    data.to_csv('../data/cleaned_data.csv', index=False)
     return data
 
+def main():
+    data = clean_data()
+    data.to_csv('../data/cleaned_data.csv', index=False)
+
 if __name__ == "__main__":
-    clean_data()
+    main()
 
 
 

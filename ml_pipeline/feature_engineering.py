@@ -140,19 +140,37 @@ def calculate_record(data):
             fighter2_wins(row)
     return data
 
+def test_model_features(data):
+    # testing model by dropping different features
+    data = data.drop(
+        ['fight_id', 'bout', 'round', 'format', 'date', 'f2_stance_Sideways', 'female', 'title_fight', 'wins_diff',
+         'total_fights_diff'], axis=1)
+    # drop for both f1 and f2
+    cols = [1, 2]
+    for col in cols:
+        data = data.drop(
+            [f'fighter{col}_id', f'fighter{col}', f'f{col}_id', f'f{col}_draws', f'f{col}_no_contests', f'f{col}_elo',
+             f'f{col}_stance_Open Stance', f'f{col}_stance_Orthodox', f'f{col}_stance_Southpaw',
+             f'f{col}_stance_Switch', f'f{col}_stance_Unknown', f'f{col}_SLpM', f'f{col}_SApM', f'f{col}_str_acc',
+             f'f{col}_height', f'f{col}_reach', f'f{col}_last_3', f'f{col}_wins', f'f{col}_losses', f'f{col}_sub_avg',
+             f'f{col}_weight',
+             f'f{col}_total_fights', f'f{col}_str_def'], axis=1)
+    return data
+
 def main():
-    data = pd.read_csv('../data/preprocessed_data.csv')
+    data = pd.read_csv('../data/preprocessed_data.csv',parse_dates=['date'])
     data = calculate_record(data)
     data = days_since_last_fight(data)
     data = last_fights_result(data)
     data = win_percent(data)
     data = experience(data)
     data = add_difference_columns(data)
+    data = test_model_features(data)
     print(data.columns)
     data.to_csv('../data/model_ready_data.csv', index = False)
 
 def combine_historic_and_upcoming(upcoming_fights_df):
-    data = pd.read_csv('../preprocessed_data.csv')
+    data = pd.read_csv('../data/preprocessed_data.csv',parse_dates=['date'])
     data = pd.concat([upcoming_fights_df, data], ignore_index=True)
     data = calculate_record(data)
     data = days_since_last_fight(data)
@@ -160,8 +178,9 @@ def combine_historic_and_upcoming(upcoming_fights_df):
     data = win_percent(data)
     data = experience(data)
     data = add_difference_columns(data)
+    data = test_model_features(data)
+    data = data.drop(['result'],axis=1,errors='ignore')
     print(data.columns)
-    data.to_csv('../data/upcoming_fights_prediction_data.csv', index=False)
     return data
 
 if __name__ == '__main__':
