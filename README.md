@@ -7,7 +7,7 @@ Using historical data scraped from UFCStats.com, this project builds a classific
 ## Running the program
 1. Clone the repo into your ide
 2. pip install -r requirements.txt
-3. run app.py and open something like {http://127.0.0.1:5000} in your browser. This may take a minute to load.
+3. Run app.py and navigate to http://127.0.0.1:5000 in your browser. Note this may take a moment to load as it scrapes and processes live data.
 
 ## Technologies/Libraries
 - Python
