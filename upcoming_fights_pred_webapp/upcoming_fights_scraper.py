@@ -160,8 +160,6 @@ def scrape_upcoming_card() -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     df = scrape_upcoming_card()
-    print(df.head())
-    print(df.columns.tolist())
     pd.set_option("display.max_colwidth", 60)
     pd.set_option("display.max_rows", None)
     df.to_csv('raw_upcoming_fights.csv', index=False)

@@ -1,10 +1,10 @@
 import pandas as pd
 import joblib
-
-from ml_pipeline.data_preprocessing import preprocess_data
+import numpy as np
+from ml_pipeline.data_preprocessing_2 import preprocess_data
 from upcoming_fights_scraper import scrape_upcoming_card
-from ml_pipeline.data_cleaning import clean_data
-from ml_pipeline.feature_engineering import combine_historic_and_upcoming
+from ml_pipeline.data_cleaning_1 import clean_data
+from ml_pipeline.feature_engineering_3 import combine_historic_and_upcoming
 
 
 def join_fighters_fights(upcoming_fights_df):
@@ -21,14 +21,23 @@ def join_fighters_fights(upcoming_fights_df):
     return full_features
 
 def main():
-    df = scrape_upcoming_card()
-    df = join_fighters_fights(df)
+    raw_upcoming_fights = scrape_upcoming_card()
+    df = join_fighters_fights(raw_upcoming_fights)
+    print('cleaning data ...')
     df = clean_data(df)
+    print('preprocessing ...')
     df = preprocess_data(df)
-    df = combine_historic_and_upcoming(df)
+    fight_date = df['date'].iloc[0]
+    print('engineering_features ...')
+    df = combine_historic_and_upcoming(df, fight_date)
+    print('predicting winners ...')
     model = joblib.load('../model/ufc_prediction_rf_model.joblib')
     predictions = model.predict(df)
-    print(predictions)
+    final_predictions_df = raw_upcoming_fights.copy()
+    final_predictions_df['predictions'] = np.where(predictions == 1, final_predictions_df['fighter1'], final_predictions_df['fighter2'])
+    final_predictions_df = final_predictions_df.drop(['fighter1_id','fighter2_id'],axis=1,errors='ignore')
+
+    return final_predictions_df
 
 if __name__ == "__main__":
     main()
