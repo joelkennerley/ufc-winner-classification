@@ -11,6 +11,7 @@ Using historical data scraped from UFCStats.com, this project builds a classific
 - Collections
 - Numpy
 - Data sourced via web scraping (see [previous project](https://github.com/joelkennerley/ufc-stats-scraper) for scraping details)
+- Flask: For UI
 
 ## Data
 The dataset was gathered by scraping detailed fight statistics from UFCStats.com, including:
@@ -27,6 +28,10 @@ The dataset was gathered by scraping detailed fight statistics from UFCStats.com
 - Performance: ~68% accuracy on testing
 
 ## Issues and future improvements
-- Have to run all files sequentially to run the program (will put together soon)
 - The data used is limited to data provided on ufcstats.com
 - elo system isnt very effective as ufc fights happen far less frequently than other sports
+
+## Running the program
+- Clone the repo into your ide
+- run pip install -r requirements.txt
+- run app.py and open something like {Running on http://127.0.0.1:5000} in your browser. This may take a minute to load
