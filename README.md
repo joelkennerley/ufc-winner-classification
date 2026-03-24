@@ -34,4 +34,4 @@ The dataset was gathered by scraping detailed fight statistics from UFCStats.com
 ## Running the program
 - Clone the repo into your ide
 - run pip install -r requirements.txt
-- run app.py and open something like {Running on http://127.0.0.1:5000} in your browser. This may take a minute to load
+- run app.py and open something like {http://127.0.0.1:5000} in your browser. This may take a minute to load.
