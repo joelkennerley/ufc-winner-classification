@@ -1,8 +1,13 @@
-# ufc-winner-classification
+# UFC Winner Classification
 This project aims to classify the winner of a UFC fight based on historical fight data using machine learning techniques.
 
 # Overview
-Using historical data scraped from UFCStats.com, this project builds a classification model to predict the winner of a UFC fight based on pre-fight statistics. The current model uses a Random Forest Classifier from the scikit-learn library and is trained and evaluated using cross-validation, achieving an accuracy of approximately 68%.
+Using historical data scraped from UFCStats.com, this project builds a classification model to predict the winner of a UFC fight based on pre-fight statistics. The current model uses a Random Forest Classifier from the scikit-learn library and is trained and evaluated using cross-validation, achieving an accuracy of approximately 68%. The predictions for the next ufc fight card is then displayed through a webapp.
+
+## Running the program
+1. Clone the repo into your ide
+2. pip install -r requirements.txt
+3. run app.py and open something like {http://127.0.0.1:5000} in your browser. This may take a minute to load.
 
 ## Technologies/Libraries
 - Python
@@ -30,8 +35,3 @@ The dataset was gathered by scraping detailed fight statistics from UFCStats.com
 ## Issues and future improvements
 - The data used is limited to data provided on ufcstats.com
 - elo system isnt very effective as ufc fights happen far less frequently than other sports
-
-## Running the program
-- Clone the repo into your ide
-- run pip install -r requirements.txt
-- run app.py and open something like {http://127.0.0.1:5000} in your browser. This may take a minute to load.
