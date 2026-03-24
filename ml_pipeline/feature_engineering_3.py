@@ -166,21 +166,30 @@ def main():
     data = experience(data)
     data = add_difference_columns(data)
     data = test_model_features(data)
-    print(data.columns)
     data.to_csv('../data/model_ready_data.csv', index = False)
 
-def combine_historic_and_upcoming(upcoming_fights_df):
+def combine_historic_and_upcoming(upcoming_fights_df,fight_date):
+    """
+    Purpose of this function is to combine historic and new data as to determine the elo
+    and records of the fighters that are fighting. This should be done via a lookup however
+    elo is not stored in fighter_stats, something to be improved.
+    :param upcoming_fights_df:
+    :param fight_date:
+    :return:
+    """
     data = pd.read_csv('../data/preprocessed_data.csv',parse_dates=['date'])
     data = pd.concat([upcoming_fights_df, data], ignore_index=True)
     data = calculate_record(data)
+    data.to_csv('test', index=False)
     data = days_since_last_fight(data)
     data = last_fights_result(data)
     data = win_percent(data)
     data = experience(data)
     data = add_difference_columns(data)
+    # removing all fights not in upcoming fight
+    data = data[data['date']==fight_date]
     data = test_model_features(data)
     data = data.drop(['result'],axis=1,errors='ignore')
-    print(data.columns)
     return data
 
 if __name__ == '__main__':

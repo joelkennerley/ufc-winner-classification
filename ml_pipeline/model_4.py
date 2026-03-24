@@ -9,11 +9,6 @@ import joblib
 # data = data.drop(['f1_elo', 'f2_elo'], axis=1)
 
 data = pd.read_csv('../data/model_ready_data.csv')
-print(data.head())
-
-
-
-print(data.columns)
 
 X = data.drop('result', axis=1)
 Y = data['result']
